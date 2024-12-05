@@ -31,3 +31,20 @@
             }
     ]
     startDate, endDate and atleast 1 BUSINESS_FACILITY are mandotary.
+
+    -> output : 
+        {
+          "data": [
+            {
+              "_id": "Fresh Kitchen Fusionopolis",
+              "total_emissions": 18725.336094212
+            },
+            {
+              "_id": "Fresh Kitchen Havelock",
+              "total_emissions": 3996.715510701
+            }
+          ],
+          "endDate": "Thu, 25 Aug 2022 00:00:00 GMT",
+          "startDate": "Mon, 18 Apr 2022 00:00:00 GMT"
+        }
+
