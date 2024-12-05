@@ -20,6 +20,7 @@ prev_filters = {
 
 @app.route('/emissions', methods=['GET'])
 def get_emissions():
+    global cached_result
     try:
         start_date = request.args.get('startDate')
         end_date = request.args.get('endDate')
@@ -78,6 +79,9 @@ def get_emissions():
             "data": db_result if not overlap_flag else merged_result
         }
         cached_result = copy.copy(response)
+        prev_filters["start_date"] = start_date
+        prev_filters["end_date"] = end_date
+        prev_filters["facilities"] = total_facilities
         
         return jsonify(response), 200
 
