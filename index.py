@@ -3,12 +3,9 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta
 from collections import defaultdict
 import copy
+from db_config import mongo_uri, database_name, collection_name
 
 app = Flask(__name__)
-
-mongo_uri = "mongodb+srv://nainsagar45:sagar123@cluster0.xrzfzmj.mongodb.net/"
-database_name = "ucdb"
-collection_name = "green_eat"
 
 client = MongoClient(mongo_uri)
 db = client[database_name]
@@ -76,7 +73,7 @@ def get_emissions():
                 merged_result.append({"_id" : facility, "total_emissions": total_emissions})
 
         response = {
-            "startDate": start_datee,
+            "startDate": start_date,
             "endDate": end_date,
             "data": db_result if not overlap_flag else merged_result
         }
