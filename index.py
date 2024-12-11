@@ -4,8 +4,11 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import copy
 from db_config import mongo_uri, database_name, collection_name
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app)
 
 client = MongoClient(mongo_uri)
 db = client[database_name]
@@ -27,17 +30,17 @@ def get_emissions():
         facilities = request.args.getlist('BUSINESS_FACILITY')
         if not start_date or not end_date or not facilities:
             return jsonify({"error": "Missing required parameters"}), 400
-        
+
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
         end_date = datetime.strptime(end_date, '%Y-%m-%d')
         if(prev_filters['start_date'] == start_date and prev_filters['end_date'] == end_date and prev_filters['facilities'] == facilities):
           return jsonify(cached_result), 200
         
         overlap_flag = False
-        if(prev_filters['start_date'] is not None and start_date > prev_filters['start_date'] and start_date < prev_filters['end_date'] and end_date > prev_filters['end_date']):
+        if(prev_filters['start_date'] is not None and start_date == prev_filters['start_date'] and end_date > prev_filters['end_date'] and end_date > prev_filters['end_date']):
             start_date = prev_filters['end_date'] + timedelta(days=1)
             overlap_flag = True
-        elif(prev_filters['start_date'] is not None and end_date > prev_filters['start_date'] and end_date < prev_filters['end_date'] and start_date < prev_filters['start_date']):
+        elif(prev_filters['start_date'] is not None and end_date == prev_filters['end_date'] and start_date < prev_filters['start_date'] and start_date < prev_filters['start_date']):
             end_date = prev_filters['start_date'] - timedelta(days=1)
             overlap_flag = True
 
